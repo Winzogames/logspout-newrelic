@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+.env
+dist/
+docker-compose-worker.yml
+newrelic_agent.log
+*.log
+logs

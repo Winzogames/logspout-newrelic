@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  newrelic:
+    container_name: newrelic
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        LOGSPOUT_VERSION: latest
+    restart: always
+    command:
+      - syslog+tls://newrelic.syslog.nr-data.net:6514
+    env_file:
+      - .env
+    environment:
+      #SYSLOG_TAG: '{{index .Container.Config.Labels "com.docker.compose.project"}}'
+      SYSLOG_TAG: "fantasy-ze-api-staging"
+      DEBUG: 'true'
+      INACTIVITY_TIMEOUT: '1m'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - /etc/hostname:/etc/host_hostname:ro
+    networks:
+      - winz
+networks:
+  winz:
+    driver: "bridge"
+    name: 'winz'
+volumes:
+  postgres_data: {}
+  redis_data: {}
