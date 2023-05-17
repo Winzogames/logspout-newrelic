@@ -106,11 +106,11 @@ func getFieldTemplates(route *router.Route) (*FieldTemplates, error) {
 		return nil, err
 	}
 	debug("setting tag to:", s)
-	s = cfg.GetEnvDefault("NEWRELIC_LICENCE_KEY", "{{.ContainerName}}"+route.Options["append_tag"])
-    if tmpl.licenceKey, err = template.New("licenceKey").Parse(s); err != nil {
+	s = cfg.GetEnvDefault("NEW_RELIC_LICENSE_KEY", "{{.ContainerName}}"+route.Options["append_tag"])
+    if tmpl.licenseKey, err = template.New("licenseKey").Parse(s); err != nil {
         return nil, err
     }
-    debug("setting licenceKey to:", s)
+    debug("setting licenseKey to:", s)
 
 	s = cfg.GetEnvDefault("SYSLOG_PID", "{{.Container.State.Pid}}")
 	if tmpl.pid, err = template.New("pid").Parse(s); err != nil {
@@ -225,7 +225,7 @@ type FieldTemplates struct {
 	priority       *template.Template
 	timestamp      *template.Template
 	hostname       *template.Template
-	licenceKey     *template.Template
+	licenseKey     *template.Template
 	tag            *template.Template
 	pid            *template.Template
 	structuredData *template.Template
@@ -381,8 +381,8 @@ func (m *Message) Render(format Format, tmpl *FieldTemplates) ([]byte, error) {
 		return nil, err
 	}
 
-	licenceKey := new(bytes.Buffer)
-    if err := tmpl.licenceKey.Execute(licenceKey, m); err != nil {
+	licenseKey := new(bytes.Buffer)
+    if err := tmpl.licenseKey.Execute(licenseKey, m); err != nil {
         return nil, err
     }
 
@@ -400,7 +400,7 @@ func (m *Message) Render(format Format, tmpl *FieldTemplates) ([]byte, error) {
 		// - the TAG field must not exceed 48 characters
 		// - the PROCID field must not exceed 128 characters
 		fmt.Fprintf(buf, "%s <%s>1 %s %.255s %.48s %.128s - %s %s\n",
-        			licenceKey, priority, timestamp, hostname, tag, pid, structuredData, data,
+        			licenseKey, priority, timestamp, hostname, tag, pid, structuredData, data,
         		)
 	case Rfc3164Format:
 		// notes from RFC:
