@@ -433,7 +433,7 @@ func (m *Message) Hostname() string {
 
 // Timestamp returns the message's syslog formatted timestamp
 func (m *Message) Timestamp() string {
-	return m.Message.Time.Format(time.RFC3339Nano)
+	return m.Message.Time.Format(time.RFC3339)
 }
 
 // ContainerName returns the message's container name
